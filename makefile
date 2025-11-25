@@ -11,15 +11,15 @@ all: $(EXEC)
 
 
 $(EXEC): $(OBJ)
-$(CXX) $(CXXFLAGS) -o $(EXEC) $(OBJ)
+	$(CXX) $(CXXFLAGS) -o $(EXEC) $(OBJ)
 
 
 %.o: %.cpp ComplexPlane.h
-$(CXX) $(CXXFLAGS) -c $<
+	$(CXX) $(CXXFLAGS) -c $<
 
 
 clean:
-rm -f $(OBJ) $(EXEC)
+	rm -f $(OBJ) $(EXEC)
 
 
 .PHONY: all clean
