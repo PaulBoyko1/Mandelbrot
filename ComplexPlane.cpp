@@ -20,18 +20,24 @@ void ComplexPlane::draw(RenderTarget& target, RenderStates states) const {
 }
 void ComplexPlane::updateRender() {
 
-    if (m_State == State::CALCULATING) {
+    if (m_State == State::Calculating) {
         for (int i = 0; i < m_pixel_size.y; i++) {
             for (int j = 0; j < m_pixel_size.x; j++) {
                 m_vArray[j + i * m_pixel_size.x].position = { (float)j,(float)i };
+                Vector2f curr_pixel = mapPixelToCoords(Vector2f(j, i));
+                size_t num_iterations = countIterations(curr_pixel);
+                Uint8 r, g, b;
+                iterationsToRGB(num_iterations, r, g, b);
+                m_vArray[j + i * m_pixel_size.x].color = Color(r, g, b);
             }
         }
+        m_state = State::Displaying;
     }
 
 }
 void ComplexPlane::zoomIn() {
 
-
+    m_zoomCount++;
 
 }
 void ComplexPlane::zoomOut() {
@@ -68,14 +74,4 @@ Vector2f ComplexPlane::mapPixelToCoords(Vector2i mousePixel) {
 
 
 
-}
-void ComplexPlane::iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b) {
-
-
-
-}
-Vector2f ComplexPlane::mapPixelToCoords(Vector2i mousePixel) {
-
-
-    
 }
