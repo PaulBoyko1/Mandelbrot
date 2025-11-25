@@ -1,8 +1,11 @@
+#pragma once
+
 #include <SFML/Graphics/VertexArray.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <iostream>
 
-using namespae sf;
+using namespace sf;
+using namespace std;
 
 const unsigned int MAX_ITER = 64;
 const float BASE_WIDTH = 4.0;
@@ -24,11 +27,15 @@ public:
     void loadText(Text& text);
     size_t countIterations(Vector2f coord);
     void iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b);
-    Vector2f mapPixelToCoords(Vector2i mousePixel)
+    Vector2f mapPixelToCoords(Vector2i mousePixel);
 private:
-    VertexArray m_Avrray;
+    VertexArray m_vArray;
     State m_state;
-    
-
+    Vector2f m_mouseLocation;
+    Vector2f m_pixel_size;
+    Vector2f m_plane_center;
+    Vector2f m_plane_size;
+    int m_zoomCount;
+    float m_aspectRatio;
 };
 
