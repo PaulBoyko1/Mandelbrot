@@ -11,65 +11,83 @@ using namespace std;
 
 int main() {
 
-    int width, height;
-    width = VideoMode::getDesktopMode().width / 2;
-    height = VideoMode::getDesktopMode().height / 2;
+    std::cout << "Program started" << std::endl;
 
-    VideoMode vm(width, height);
-    ComplexPlane cp(width, height);
-    
-    //FONT CREATION
+    int desktopWidth  = VideoMode::getDesktopMode().width;
+    int desktopHeight = VideoMode::getDesktopMode().height;
+
+    RenderWindow window(VideoMode(desktopWidth, desktopHeight),"Mandelbrot");
+
+    window.setFramerateLimit(60);
+
+    ComplexPlane plane(desktopWidth, desktopHeight);
+
     Font font;
-	Text text;
-	
-    font.loadFromFile("Roboto-VariableFont_wdth,wght.ttf");
-	text.setFont(font);
-	text.setString("Select 3 points as the vertices of the triangle and a 4th as the starting point for the ChaosGame");
-	text.setCharacterSize(35);
-	text.setFillColor(Color(0, 0, 139));
-
-    while (window.isOpen())
-
-    {
-
-    ///Input
-
-        if (Keyboard::isKeyPressed(Keyboard::Escape))
-
-        {
-
-            window.close();
-
-        }
-        if (event.mouseButton.button == sf::Mouse::Left)
-        {
-            std::cout << "the left button was pressed" << std::endl;
-            std::cout << "mouse x: " << event.mouseButton.x << std::endl;
-            std::cout << "mouse y: " << event.mouseButton.y << std::endl;
-            cp.zoomOut();
-            
-        }
-        if (event.mouseButton.button == sf::Mouse::Right)
-        {
-            std::cout << "the right button was pressed" << std::endl;
-            std::cout << "mouse x: " << event.mouseButton.x << std::endl;
-            std::cout << "mouse y: " << event.mouseButton.y << std::endl;
-            cp.zoomIn();
-            
-        }
-
-    ///Update
-
-
-
-
-    ///Draw
-
-    window.clear();
-
-        //window.draw(...);
-
-    window.display();
-
+    if (!font.loadFromFile("arial.ttf")) {
+        cout << "Error loading font\n";
     }
+
+    Text uiText;
+    uiText.setFont(font);
+    uiText.setCharacterSize(18);
+    uiText.setFillColor(Color::White);
+
+    // ============================
+    // Main Loop
+    // ============================
+    while (window.isOpen())
+    {
+        Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == Event::Closed)
+            {
+                window.close();
+            }
+
+            if (event.type == Event::MouseButtonPressed)
+            {
+                Vector2i pixel(event.mouseButton.x, event.mouseButton.y);
+
+                if (event.mouseButton.button == Mouse::Left) {
+                    plane.setCenter(pixel);
+                    plane.zoomIn();
+                }
+
+                if (event.mouseButton.button == Mouse::Right) {
+                    plane.setCenter(pixel);
+                    plane.zoomOut();
+                }
+            }
+            if (event.type == Event::MouseMoved)
+            {
+                plane.setMouseLocation(
+                    Vector2i(event.mouseMove.x, event.mouseMove.y)
+                );
+            }
+        }
+
+        // Escape key closes app
+        if (Keyboard::isKeyPressed(Keyboard::Escape)) {
+            window.close();
+        }
+
+        // ============================
+        // Update Scene
+        // ============================
+        plane.updateRender();
+        plane.loadText(uiText);
+
+        // ============================
+        // Draw Scene
+        // ============================
+        window.clear(Color::Black);
+
+        window.draw(plane);
+        window.draw(uiText);
+
+        window.display();
+    }
+
+    return 0;
 }
