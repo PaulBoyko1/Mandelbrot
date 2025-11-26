@@ -18,7 +18,7 @@ enum class State {Calculating, Displaying};
 class ComplexPlane : public Drawable {
 public:
     ComplexPlane(int pixelWidth, int pixelHeight);
-    void draw(RenderTarget& target, RenderStates states) const override;
+    void draw(RenderTarget& target, RenderStates states) const;
     void updateRender();
     void zoomIn();
     void zoomOut();
